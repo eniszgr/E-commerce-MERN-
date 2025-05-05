@@ -3,6 +3,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv =require('dotenv');
 const cookieParser = require('cookie-parser');
+const db = require('./config/db.js');
+const product = require('./routes/product.js');
 
 dotenv.config();
 
@@ -13,10 +15,9 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(cookieParser());
 
 
-app.get('/products',(req,res)=>{
-    res.status(200).json({message:"rota belirlendi"})
-})
+app.use('/',product); //product routes
 
+db();
 
 //Port identification
 const PORT = 4000;
