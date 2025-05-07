@@ -16,16 +16,16 @@ class ProductFilter{
         } : {};
 
         this.query = this.query.find({...keyword});                             //find with keyword. '...keyword' is used to spread the keyword object into the query.
-        return this;                                                            //return this to use it in the next method
+        return this;                                                            //return ProductFilter(inc query queryStr) which are filtered by keyword
     }                                                                           
 
     filter(){                                                                   //filter the products according to gt, gte, lt, lte
         const queryCopy = {...this.queryStr};                                   //object destructuring
         const deleteArea = ['keyword','page','limit'];                          //items which will be deleted from the queryStr object
         deleteArea.forEach((key)=>delete queryCopy[key]);                       //delete the keyword, page and limit from the queryCopy object 
-
+        //let
         const queryStr = JSON.stringify(queryCopy);                             //convert the queryCopy object to string to modify it 
-        queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g,(key)=>`$${key}`);   //modify for mongodb query
+        queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g,(key)=>`$${key}`);   //modify for mongodb query to use filter
         this.query = this.query.find(JSON.parse(queryStr));                     //modify the query string to json object
 
         return this;
