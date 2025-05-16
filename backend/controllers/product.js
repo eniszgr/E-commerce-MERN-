@@ -5,7 +5,7 @@ const cloudinary = require('cloudinary').v2;
 const allProducts = async(req,res)=>{
     const resultPerPage = 10;
     const productFilter = new ProductFilter(Product.find(), req.query).search().filter().pagination(resultPerPage);
-    const products = await productFilter.query;
+    const products = await productFilter.query;                                 //productFilter.query is the filtered & ordered query
     console.log(req);
 
     res.status(200).json({products});
@@ -129,6 +129,7 @@ const createReview = async(req,res,next)=>{
     product.raiting = avg / product.reviews.length;
 
     await product.save({validateBeforeSave:false});
+    //skip schema validation 
 
     res.status(200).json({message:"Review added successfully"})
 

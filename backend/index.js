@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const db = require('./config/db.js');
 const product = require('./routes/product.js');
 const cloudinary = require('cloudinary').v2;
+const user = require('./routes/user.js');
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 
 app.use('/',product); //product routes
+app.use('/',user); //user routes
 
 db();
 
