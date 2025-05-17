@@ -46,6 +46,7 @@ const createProduct = async(req,res,next)=>{
         })
     }
     req.body.images = allImage;                                                     //images infos are stored in req.body.images     
+    req.body.user = req.user.id;
 
     const product = await Product.create(req.body);
     res.status(201).json({product});

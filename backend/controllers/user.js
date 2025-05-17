@@ -1,15 +1,24 @@
-
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("cloudinary").v2;
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 // Register user
 const register = async (req, res) => {
+  const avatar = await cloudinary.uploader.upload(req.body.avatar, {
+    folder: "avatar",
+    width: 130,
+    crop: "scale",
+  });
+
   const { name, email, password } = req.body;
 
   //check email used before
   const user = await User.findOne({ email });
-  if (user) {                                                               // is exist
+  if (user) {
+    // is exist
     return res.status(500).json({
       message: "User already exists",
     });
@@ -28,18 +37,29 @@ const register = async (req, res) => {
       message: "Password should be at least 6 characters",
     });
   }
-  const passwordHash = await bcrypt.hash(password, 10);                                       //encrypt password
-  const newUser = await User.create({ name, email, password: passwordHash });                 //create user with hashed password
-  const token = await jwt.sign({ id: newUser._id }, "SECRETTOKEN", {                          //sign token newly created user
+  const passwordHash = await bcrypt.hash(password, 10); //encrypt password
+  const newUser = await User.create({
+    name,
+    email,
+    password: passwordHash,
+    avatar: {
+      public_id: avatar.public_id,
+      url: avatar.secure_url,
+    },
+  }); //create user with hashed password
+  const token = await jwt.sign({ id: newUser._id }, "SECRETTOKEN", {
+    //sign token newly created user
     expiresIn: "1h",
   });
 
-  const cookieOptions = {                                                                     //set cookie options
-    httpOnly: true,                                                                           // only accessible by the web server
-    expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),                                  //5 days  
+  const cookieOptions = {
+    //set cookie options
+    httpOnly: true, // only accessible by the web server
+    expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), //5 days
   };
 
-  return res.status(201).cookie("token", token, cookieOptions).json({                         //send response with token
+  return res.status(201).cookie("token", token, cookieOptions).json({
+    //send response with token
     newUser,
     token,
   });
@@ -98,9 +118,102 @@ const logout = async (req, res) => {
   });
 };
 
+
+
+
+//Notion
 //recovery options
-const forgotPassword = async (req, res) => {};
+const forgotPassword = async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
 
-const resetPassword = async (req, res) => {};
+  if (!user) {
+    return res.status(500).json({ message: "user not found" });
+  }
 
-module.exports = { register, login, logout, forgotPassword, resetPassword };
+  //create token
+  const resetToken = crypto.randomBytes(20).toString("hex");
+  user.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  user.resetPasswordExpire = Date.now() + 5 * 60 * 1000;
+
+  await user.save({ validateBeforeSave: false });
+
+  const passwordUrl = `${req.protocol}://${req.get("host")}/reset${resetToken}`;
+
+  const message = `reset passwor token ${passwordUrl}`;
+
+  try {
+    const transporter = nodemailer.createTransport({
+      port: 465,
+      service: "gmail",
+      host: "sntp.gmail.com",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
+      },
+      secure:true,
+    });
+
+    const mailData={
+      from:process.env.EMAIL,
+      to: req.body.email,
+      subject:'Reset Password',
+      test: message
+    }
+
+    await transporter.sendMail(mailData);
+    res.status(200).json({
+       message:'check your email'
+    })
+
+
+
+
+  } catch (error) {
+    user.resetPasswordExpire = undefined;
+    user.resetPasswordToken = undefined;
+    await user.save({ validateBeforeSave: false });
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  
+  const resetPasswordToken = crypto.createHash("sha256").update(req.params.token).digest('hex');
+
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire:{$gt:Date.now()}
+  })
+  if(!user){
+    res.status(500).json({message:"unvalid token"});
+  }
+
+user.password = req.body.password;
+user.resetPasswordExpire = undefined;
+user.resetPasswordToken= undefined;
+
+await user.save();
+const token = jwt.sign({id:user_id},"SECRETTOKEN",{expiresIn:"1h"})
+ const cookieOptions = {
+    //set cookie options
+    httpOnly: true, // only accessible by the web server
+    expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), //5 days
+  };
+
+  return res.status(201).cookie("token", token, cookieOptions).json({
+    //send response with token
+    user,
+    token,
+  });
+
+};
+
+const userDetail = async(req,res,next)=>{
+  const user = await User.findById(req.params.id);
+  res.status(200).json({user})
+}
+
+module.exports = { register, login, logout, forgotPassword, resetPassword,userDetail };
