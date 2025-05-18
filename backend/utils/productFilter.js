@@ -24,7 +24,7 @@ class ProductFilter{
         const deleteArea = ['keyword','page','limit'];                          //items which will be deleted from the queryStr object
         deleteArea.forEach((key)=>delete queryCopy[key]);                       //delete the keyword, page and limit from the queryCopy object 
         //let
-        const queryStr = JSON.stringify(queryCopy);                             //convert the queryCopy object to string to modify it 
+        let queryStr = JSON.stringify(queryCopy);                             //convert the queryCopy object to string to modify it 
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g,(key)=>`$${key}`);   //modify for mongodb query to use filter
         this.query = this.query.find(JSON.parse(queryStr));                     //modify the query string to json object
 
