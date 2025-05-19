@@ -14,24 +14,26 @@ function Home() {
   const {products, loading} = useSelector((state) => state.product);    //get products state products[] loading error and destructuring it
 
   console.log(products, loading, 'urunleerr');
-  return (
-    <>
+  console.log('------------------')
+  products?.products?.forEach((product, index) => {
+  console.log(`Product ${index} images:`, product.images);
+});
+ return (
+  <>
     {
-      loading ? <h1>Loading...</h1> : products?.products &&             //data comes as an array of objects named products and Prototype we seperate it
-      <div className=''>
-        {
-          products?.products?.map((product,i) =>  {                     // ? is used to check if the data is not null or undefined
-           return <ProductCard product={products} key={i}/>
-          }
-            
-          )
-        }
-      </div>
-      
+      loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <div className="flex flex-wrap justify-center gap-6">
+          {products?.products?.map((product, i) => (
+            <ProductCard product={product} key={product.id || i} />
+          ))}
+        </div>
+      )
     }
-    
-    </>
-  )
+  </>
+);
+
 }
 
 export default Home
