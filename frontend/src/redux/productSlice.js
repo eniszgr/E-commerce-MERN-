@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     products: [],           // products array
+    product: {},           // single product object
     loading: false,         // loading state    
     error: null             // error state  
 }
@@ -10,6 +11,13 @@ export const getProducts = createAsyncThunk(                                //th
     'products',                                                             //thunk name, prefix for the action
     async ()=>{
         const response = await fetch('http://localhost:4000/products')      //fetching the data 
+        return (await response.json());                                     //converting the response to json
+    }
+)
+export const getProductDetails = createAsyncThunk(                                //thunk is a async functions controller
+    'product',                                                             //thunk name, prefix for the action
+    async (id)=>{
+        const response = await fetch(`http://localhost:4000/products/${id}`)      //fetching the data 
         return (await response.json());                                     //converting the response to json
     }
 )
@@ -26,7 +34,14 @@ const productSlice = createSlice({
         })
         builder.addCase(getProducts.fulfilled, (state,action) => {          // fulfilled means the request is completed successfully
             state.loading = false,
-            state.products = action.payload
+            state.products = action.payload                                 // payload is the data returned from the async function
+        })
+        builder.addCase(getProductDetails.pending, (state,action) => {            // pending means the request is in progress
+            state.loading = true
+        })
+        builder.addCase(getProductDetails.fulfilled, (state,action) => {          // fulfilled means the request is completed successfully
+            state.loading = false,
+            state.product = action.payload                                 // payload is the data returned from the async function
         })
     }
 })

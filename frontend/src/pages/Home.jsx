@@ -11,13 +11,8 @@ function Home() {
     dispatch(getProducts());
   },[dispatch]);  //dispatching the action to get the products
 
-  const {products, loading} = useSelector((state) => state.product);    //get products state products[] loading error and destructuring it
+  const {products, loading} = useSelector((state) => state.product);    //Destructure the products array and loading state from the product slice in the Redux store
 
-  console.log(products, loading, 'urunleerr');
-  console.log('------------------')
-  products?.products?.forEach((product, index) => {
-  console.log(`Product ${index} images:`, product.images);
-});
  return (
   <>
     {

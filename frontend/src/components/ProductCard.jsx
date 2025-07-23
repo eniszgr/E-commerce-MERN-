@@ -1,23 +1,28 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { useNavigate } from 'react-router-dom';
+
 
 function ProductCard({ product }) {
+  const navigate = useNavigate();
+
+
   return (
-    <div className="w-[250px] bg-white rounded-xl shadow-md p-3 hover:shadow-lg transition duration-300">
-      <Swiper
-        modules={[Navigation, Pagination]}
+    <div onClick={()=> navigate(`/product/${product?._id}`)} className="w-[250px] bg-white rounded-xl shadow-md p-3 hover:shadow-lg transition duration-300">
+      {/* created an swipper object to displaying product */}
+      <Swiper                                                                 //some swipper properties
+        modules={[Navigation, Pagination, Autoplay]}
+        autoplay={{ delay: 3000 }}
         navigation
         pagination={{ clickable: true }}
-        loop={true}
+        loop={product.images.length > 1} // loop only if there are multiple images
         spaceBetween={10}
         slidesPerView={1}
         className="rounded-md overflow-hidden h-[200px]"
       >
-        {product.images.map((image, i) => (
+        {/* mapping through the product images to display them in the swiper */}
+        {product.images.map((image, i) => ( 
           <SwiperSlide key={i}>
             <img
               src={image.url}

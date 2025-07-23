@@ -3,8 +3,14 @@ import "./index.css";
 import Home from "./pages/Home";
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-cube';
+import 'swiper/css/autoplay';
+
+
 import Detail from "./pages/Detail";
 
 function App() {
