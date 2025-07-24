@@ -1,5 +1,6 @@
 import { CiShoppingCart } from "react-icons/ci";
-import { useState } from 'react'
+import { use, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const menuItems = [
@@ -7,6 +8,7 @@ function Header() {
     { name: 'Admin', path: '/admin' },
     { name: 'Logout', path:"/logout"},
   ]
+ const navigate = useNavigate();
 
   //menu control func
   const [openMenu, setOpenMenu] = useState(false);
@@ -14,7 +16,7 @@ function Header() {
   return (
     <div>
         <div className='bg-gray-200 h-16 px-5 flex items-center justify-between'>
-            <div className='text-4xl'>e.com</div>
+            <div className='text-4xl cursor-pointer' onClick={()=>navigate('/')}>e.com</div>
             
             {/* Searching*/}
             <div className="flex items-center gap-5">
@@ -23,7 +25,7 @@ function Header() {
                 <div className="p-2 ml-1 bg-white cursor-pointer">Search</div>
               </div>
               {/* User Profile and menu*/}
-              <div className='relative'>
+              <div className='relative cursor-pointer'>
                 <img onClick={()=>{setOpenMenu(!openMenu);}} src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png" className="w-10"alt="" />
 
                 {/* get menu */}
@@ -35,7 +37,7 @@ function Header() {
               </div>
 
               {/* Shopping Cart */}
-              <div className='relative'>
+              <div className='relative cursor-pointer'>
                   <CiShoppingCart size={30}/>
                   <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white">4</div>
               </div>

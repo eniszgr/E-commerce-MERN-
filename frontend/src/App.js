@@ -12,14 +12,16 @@ import 'swiper/css/autoplay';
 
 
 import Detail from "./pages/Detail";
+import Products from "./components/Products";
 
 function App() {
   return (
    <Router>
     <Header/>
     <Routes>
-      <Route exact path="/" element={<Home/>}/>
-      <Route exact path="/product/:id" element={<Detail/>}/>
+      <Route  path="/" element={<Home/>}/>
+      <Route  path="/products" element={<Products/>}/>
+      <Route  path="/product/:id" element={<Detail/>}/>
 
 
       
