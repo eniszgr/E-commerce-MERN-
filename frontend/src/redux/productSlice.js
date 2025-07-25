@@ -9,8 +9,8 @@ const initialState = {
 
 export const getProducts = createAsyncThunk(                                //thunk is a async functions controller
     'products',                                                             //thunk name, prefix for the action
-    async ()=>{
-        const response = await fetch('http://localhost:4000/products')      //fetching the data 
+    async (params)=>{
+        const response = await fetch(`http://localhost:4000/products?keyword=${params.keyword}`)      //fetching the data 
         return (await response.json());                                     //converting the response to json
     }
 )

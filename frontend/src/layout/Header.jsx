@@ -1,6 +1,8 @@
 import { CiShoppingCart } from "react-icons/ci";
 import { use, useState } from 'react'
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getKeyword } from "../redux/generalSlice";
 
 function Header() {
   const menuItems = [
@@ -8,10 +10,19 @@ function Header() {
     { name: 'Admin', path: '/admin' },
     { name: 'Logout', path:"/logout"},
   ]
- const navigate = useNavigate();
+ 
 
   //menu control func
   const [openMenu, setOpenMenu] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const keywordFunc = ()=>{ 
+    dispatch(getKeyword(keyword));
+    setKeyword("");
+    navigate('/products');
+  }
 
   return (
     <div>
@@ -21,8 +32,8 @@ function Header() {
             {/* Searching*/}
             <div className="flex items-center gap-5">
               <div className="flex items-center">
-                <input className="p-2 outline-none" type="text" placeholder='Search' />
-                <div className="p-2 ml-1 bg-white cursor-pointer">Search</div>
+                <input  value ={keyword} onChange={e=>setKeyword(e.target.value)} className="p-2 outline-none" type="text" placeholder='Search' />
+                <div onClick={keywordFunc} className="p-2 ml-1 bg-white cursor-pointer">Search</div>
               </div>
               {/* User Profile and menu*/}
               <div className='relative cursor-pointer'>

@@ -13,8 +13,12 @@ function Home() {
 
   const {products, loading} = useSelector((state) => state.product);    //Destructure the products array and loading state from the product slice in the Redux store
 
+
  return (
   <>
+    <div className="w-full h-[400px] overflow-hidden">
+      <img className="w-full h-full  object-cover object-bottom" src="https://plturkey.org/wp-content/uploads/2019/05/discount.jpg" alt="" />
+    </div>
     {
       loading ? (
         <h1>Loading...</h1>

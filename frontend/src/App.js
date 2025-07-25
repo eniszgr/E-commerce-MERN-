@@ -16,19 +16,22 @@ import Products from "./components/Products";
 
 function App() {
   return (
-   <Router>
-    <Header/>
-    <Routes>
-      <Route  path="/" element={<Home/>}/>
-      <Route  path="/products" element={<Products/>}/>
-      <Route  path="/product/:id" element={<Detail/>}/>
-
-
-      
-    </Routes>
-    <Footer/>
-   </Router>
+    <div className="min-h-screen flex flex-col">
+      <Router>
+        <Header />
+        <main className="flex-grow">   
+          {/* flex grow ile boş alanlar doldurulur */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/product/:id" element={<Detail />} />
+          </Routes>
+        </main>
+        <Footer />
+      </Router>
+    </div>
   );
 }
+
 
 export default App;
