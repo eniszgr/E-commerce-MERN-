@@ -10,13 +10,11 @@ const initialState = {
 export const getProducts = createAsyncThunk(
   'products',
   async (params = {}) => {
-    
-   
-    let link = `http://localhost:4000/products?keyword=${params.keyword}&rating[gte]=${params.rating}`;
-
+    // rating parametresi yoksa 0 gönder
+    const rating = params.rating !== undefined ? params.rating : 0;
+    let link = `http://localhost:4000/products?keyword=${params.keyword}&rating[gte]=${rating}`;
     const response = await fetch(link);
     const data = await response.json();
- 
     return data;
   }
 )
@@ -53,4 +51,4 @@ const productSlice = createSlice({
 })
 
 export const {} = productSlice.actions
-export default productSlice.reducer  
+export default productSlice.reducer
