@@ -12,7 +12,13 @@ export const getProducts = createAsyncThunk(
   async (params = {}) => {
     // rating parametresi yoksa 0 gönder
     const rating = params.rating !== undefined ? params.rating : 0;
-    let link = `http://localhost:4000/products?keyword=${params.keyword}&rating[gte]=${rating}`;
+    console.log(rating);
+    console.log('min');
+    console.log(params.price.min);
+    let link = `http://localhost:4000/products?keyword=${params.keyword}&rating[gte]=${rating}&price[gte]=${params.price.min}&price[lte]=${params.price.max}`;
+    if (params.category) {
+      link += `&category=${params.category}`;
+    }
     const response = await fetch(link);
     const data = await response.json();
     return data;
