@@ -8,7 +8,10 @@ function Products() {
   const dispatch = useDispatch();
   const { products, loading } = useSelector((state) => state.product);
   const { keyword } = useSelector((state) => state.general);
-   useEffect(() => {
+
+  //use in {} when you want to give multiple values from the state  
+  //like { keyword: "telefon", category: "electronics" } and you can access like params.keyword and params
+  useEffect(() => {
     dispatch(getProducts({keyword}));
   }, [dispatch,keyword]);
   console.log(keyword);

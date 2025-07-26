@@ -8,7 +8,7 @@ function Home() {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts({keyword:''}));
   },[dispatch]);  //dispatching the action to get the products
 
   const {products, loading} = useSelector((state) => state.product);    //Destructure the products array and loading state from the product slice in the Redux store
