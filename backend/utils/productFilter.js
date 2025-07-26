@@ -19,15 +19,13 @@ class ProductFilter{
         return this;                                                            //return ProductFilter(inc query queryStr) which are filtered by keyword
     }                                                                           
 
-    filter(){                                                                   //filter the products according to gt, gte, lt, lte
-        const queryCopy = {...this.queryStr};                                   //object destructuring
-        const deleteArea = ['keyword','page','limit'];                          //items which will be deleted from the queryStr object
-        deleteArea.forEach((key)=>delete queryCopy[key]);                       //delete the keyword, page and limit from the queryCopy object 
-        //let
-        let queryStr = JSON.stringify(queryCopy);                             //convert the queryCopy object to string to modify it 
-        queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g,(key)=>`$${key}`);   //modify for mongodb query to use filter
-        this.query = this.query.find(JSON.parse(queryStr));                     //modify the query string to json object
-
+    filter() {
+        const queryCopy = {...this.queryStr};
+        const deleteArea = ['keyword','page','limit'];
+        deleteArea.forEach((key)=>delete queryCopy[key]);
+        // YENİ:
+        const queryObj = parseNested(queryCopy);
+        this.query = this.query.find(queryObj);
         return this;
     }
 
@@ -39,4 +37,19 @@ class ProductFilter{
     }
 
 }
+
+function parseNested(obj) {
+  const result = {};
+  for (const key in obj) {
+    if (key.includes('[') && key.includes(']')) {
+      const [main, sub] = key.split(/\[|\]/).filter(Boolean);
+      if (!result[main]) result[main] = {};
+      result[main][`$${sub}`] = isNaN(obj[key]) ? obj[key] : Number(obj[key]);
+    } else {
+      result[key] = isNaN(obj[key]) ? obj[key] : Number(obj[key]);
+    }
+  }
+  return result;
+}
+
 module.exports = ProductFilter;

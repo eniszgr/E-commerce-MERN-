@@ -7,13 +7,18 @@ const initialState = {
     error: null             // error state  
 }
 
-export const getProducts = createAsyncThunk(                                //thunk is a async functions controller
-    'products',                                                             //thunk name, prefix for the action
-    // params ={} works like params = params || {}   use if it can be em
-    async (params ={})=>{
-        const response = await fetch(`http://localhost:4000/products?keyword=${params.keyword}`)      //fetching the data 
-        return (await response.json());                                     //converting the response to json
-    }
+export const getProducts = createAsyncThunk(
+  'products',
+  async (params = {}) => {
+    
+   
+    let link = `http://localhost:4000/products?keyword=${params.keyword}&rating[gte]=${params.rating}`;
+
+    const response = await fetch(link);
+    const data = await response.json();
+ 
+    return data;
+  }
 )
 export const getProductDetails = createAsyncThunk(                                //thunk is a async functions controller
     'product',                                                             //thunk name, prefix for the action
