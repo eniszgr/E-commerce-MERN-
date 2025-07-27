@@ -13,6 +13,7 @@ import 'swiper/css/autoplay';
 
 import Detail from "./pages/Detail";
 import Products from "./components/Products";
+import Auth from "./pages/Auth";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<Detail />} />
+            <Route path="/auth" element={<Auth />} />
           </Routes>
         </main>
         <Footer />

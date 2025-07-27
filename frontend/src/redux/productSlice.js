@@ -15,7 +15,9 @@ export const getProducts = createAsyncThunk(
     console.log(rating);
     console.log('min');
     console.log(params.price.min);
-    let link = `http://localhost:4000/products?keyword=${params.keyword}&rating[gte]=${rating}&price[gte]=${params.price.min}&price[lte]=${params.price.max}`;
+    const priceMin = params.price?.min ?? 0;
+    const priceMax = params.price?.max ?? 3000;
+    let link = `http://localhost:4000/products?keyword=${params.keyword}&rating[gte]=${rating}&price[gte]=${priceMin}&price[lte]=${priceMax}`;
     if (params.category) {
       link += `&category=${params.category}`;
     }
