@@ -12,7 +12,7 @@ const allProducts = async(req,res)=>{
     console.log("MONGOOSE QUERY:", productFilter.query.getQuery());
 
     const products = await productFilter.query;
-    console.log("SONUÇ:", products);
+
 
     res.status(200).json({products});
 }

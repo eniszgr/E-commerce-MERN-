@@ -7,11 +7,12 @@ const nodemailer = require("nodemailer");
 
 // Register user
 const register = async (req, res) => {
-  const avatar = await cloudinary.uploader.upload(req.body.avatar, {
-    folder: "avatar",
-    width: 130,
-    crop: "scale",
-  });
+  try {
+    const avatar = await cloudinary.uploader.upload(req.body.avatar, {
+      folder: "avatar",
+      width: 130,
+      crop: "scale",
+    });
 
   const { name, email, password } = req.body;
 
@@ -53,16 +54,23 @@ const register = async (req, res) => {
   });
 
   const cookieOptions = {
-    //set cookie options
-    httpOnly: true, // only accessible by the web server
-    expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), //5 days
+    httpOnly: true,
+    expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 gün
+    sameSite: 'lax',
+    secure: false, // development için false, production'da true
+    path: '/',
+    domain: 'localhost' // Cookie'nin hangi domain'de kaydedileceği
   };
 
-  return res.status(201).cookie("token", token, cookieOptions).json({
-    //send response with token
-    newUser,
-    token,
-  });
+    return res.status(201).cookie("token", token, cookieOptions).json({
+      //send response with token
+      newUser,
+      token,
+    });
+  } catch (error) {
+    console.error("REGISTER ERROR:", error);
+    res.status(500).json({ message: error.message, stack: error.stack });
+  }
 };
 
 // Login user
@@ -98,6 +106,10 @@ const login = async (req, res) => {
   const cookieOptions = {
     httpOnly: true,
     expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+    sameSite: 'lax',
+    secure: false,
+    path: '/',
+    domain: 'localhost'
   };
 
   return res.status(200).cookie("token", token, cookieOptions).json({
