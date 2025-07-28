@@ -1,7 +1,7 @@
 import { CiShoppingCart } from "react-icons/ci";
-import { use, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getKeyword } from "../redux/generalSlice";
 
 function Header() {
@@ -11,6 +11,8 @@ function Header() {
     { name: 'Logout', path:"/logout"},
   ]
  
+  // pull user information from Redux state
+  const { user, isAuth } = useSelector((state) => state.user);
 
   //menu control func
   const [openMenu, setOpenMenu] = useState(false);
@@ -23,6 +25,8 @@ function Header() {
     setKeyword("");
     navigate('/products');
   }
+
+
 
   return (
     <div>
@@ -37,7 +41,12 @@ function Header() {
               </div>
               {/* User Profile and menu*/}
               <div className='relative cursor-pointer'>
-                <img onClick={()=>{setOpenMenu(!openMenu);}} src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png" className="w-10"alt="" />
+                <img 
+                  onClick={()=>{setOpenMenu(!openMenu);}} 
+                  src={isAuth && user?.avatar?.url ? user.avatar.url : "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png"} 
+                  className="w-10 h-10 rounded-full object-cover" 
+                  alt="User Avatar" 
+                />
 
                 {/* get menu */}
                 <div className='absolute right-0 mt-3 w-[200px] bg-white shadow-lg shadow-gray-600'>
