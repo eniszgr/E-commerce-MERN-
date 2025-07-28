@@ -113,7 +113,7 @@ const login = async (req, res) => {
   };
 
   return res.status(200).cookie("token", token, cookieOptions).json({
-    newUser,
+    user, // newUser yerine user kullan
     token,
   });
 };

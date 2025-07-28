@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { useDispatch } from "react-redux";
-import { register } from "../redux/userSlice";
+import { login, register } from "../redux/userSlice";
 
 function Auth() {
   const [signUp, setSignUp] = useState(true);
@@ -20,7 +20,9 @@ function Auth() {
     dispatch(register(data));
 
   };
-  const loginFunc = () => {};
+  const loginFunc = () => {
+    dispatch(login(data));
+  };
   const handleChange = (e) =>{
     if(e.target.name === "avatar"){
       const reader = new FileReader();
