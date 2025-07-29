@@ -14,8 +14,16 @@ import 'swiper/css/autoplay';
 import Detail from "./pages/Detail";
 import Products from "./components/Products";
 import Auth from "./pages/Auth";
+import Profile from "./pages/Profile";
+import { loadUser } from "./redux/userSlice";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
   return (
     <div className="min-h-screen flex flex-col">
       <Router>
@@ -27,6 +35,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<Detail />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </main>
         <Footer />

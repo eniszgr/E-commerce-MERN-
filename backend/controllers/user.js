@@ -68,7 +68,7 @@ const register = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.error("REGISTER ERROR:", error);
+    
     res.status(500).json({ message: error.message, stack: error.stack });
   }
 };
@@ -113,7 +113,7 @@ const login = async (req, res) => {
   };
 
   return res.status(200).cookie("token", token, cookieOptions).json({
-    user, // newUser yerine user kullan
+    user, 
     token,
   });
 };
@@ -224,7 +224,7 @@ const token = jwt.sign({id:user_id},"SECRETTOKEN",{expiresIn:"1h"})
 };
 
 const userDetail = async(req,res,next)=>{
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.user);
   res.status(200).json({user})
 }
 

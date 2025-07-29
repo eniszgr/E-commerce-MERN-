@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getKeyword } from "../redux/generalSlice";
+import { logout } from "../redux/userSlice";
 
 function Header() {
   const menuItems = [
@@ -26,6 +27,14 @@ function Header() {
     navigate('/products');
   }
 
+  const menuFunc = (item)=>{
+    if(item.name === "Logout"){
+      dispatch(logout());
+      window.location = "/";
+    }else{
+      window.location=item.path
+    }
+  }
 
 
   return (
@@ -50,9 +59,10 @@ function Header() {
 
                 {/* get menu */}
                 <div className='absolute right-0 mt-3 w-[200px] bg-white shadow-lg shadow-gray-600'>
-                  {openMenu && menuItems.map((item, index) => {
-                    return(<div className="px-2 py-1 hover:bg-gray-100" key={index}>{item.name}</div>)
-                  })}
+                  {openMenu && menuItems.map((item, index) => (
+                    <div onClick={()=>{menuFunc(item)}} className="px-2 py-1 hover:bg-gray-100" key={index}>{item.name}</div>
+                  
+                  ))}
                 </div>
               </div>
 

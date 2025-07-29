@@ -1,73 +1,96 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    user: {},
-    isAuth: false,
-    loading: false,         // loading state    
-}
+  user: {},
+  isAuth: false,
+  loading: false, // loading state
+};
 
-export const register = createAsyncThunk(
-  'register',
-  async (data={}) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', // Cookie'lerin gönderilmesi için kritik!
-        body: JSON.stringify(data)
-    };
-   
-    const response = await fetch(`http://localhost:4000/register`,requestOptions);
-    
+export const register = createAsyncThunk("register", async (data = {}) => {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include", // Cookie'lerin gönderilmesi için kritik!
+    body: JSON.stringify(data),
+  };
+  const response = await fetch(
+    `http://localhost:4000/register`,
+    requestOptions
+  );
+  return response.json();
+});
+export const login = createAsyncThunk("login", async (data = {}) => {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include", // Cookie'lerin gönderilmesi için kritik!
+    body: JSON.stringify({ email: data.email, password: data.password }),
+  };
+  const response = await fetch(`http://localhost:4000/login`, requestOptions);
+  return response.json();
+});
+export const loadUser = createAsyncThunk("loadUser", async () => {
+  const response = await fetch("http://localhost:4000/me", {
+    credentials: "include",
+  });
+  return response.json();
+});
+export const logout = createAsyncThunk(
+  'user/logout',
+  async () => {
+    const response = await fetch('http://localhost:4000/logout', {
+      method: 'POST',
+      credentials: 'include'
+    });
     return response.json();
   }
-)
-export const login = createAsyncThunk(
-    'login',
-    async (data={}) => {
-      const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include', // Cookie'lerin gönderilmesi için kritik!
-          body: JSON.stringify({email: data.email, password: data.password})
-      };
-     
-      const response = await fetch(`http://localhost:4000/login`,requestOptions);
-      
-      return response.json();
-    }
-  )
-
+);
 
 const userSlice = createSlice({
-    name: 'user',                                                        //slice is stored in the redux store as product
-    initialState,                                                           //initial state
-    reducers: {},
-    extraReducers:(builder) => {                                            //using extra reducers to handle async actions
-        builder.addCase(register.pending, (state,action) => {            // pending means the request is in progress
-            state.loading = true
-            state.isAuth = false
-        })
-        builder.addCase(register.fulfilled, (state,action) => {          // fulfilled means the request is completed successfully
-            state.loading = false
-            state.isAuth = true
-            state.user = action.payload.newUser                              // payload is the data returned from the async function
-            // Token'ı localStorage'a da kaydet
-            localStorage.setItem('token', action.payload.token)
-        })
-        builder.addCase(login.pending, (state,action) => {            // pending means the request is in progress
-            state.loading = true
-            state.isAuth = false
-        })
-        builder.addCase(login.fulfilled, (state,action) => {          // fulfilled means the request is completed successfully
-            state.loading = false
-            state.isAuth = true
-            state.user = action.payload.user                              // newUser yerine user kullan
-            // Token'ı localStorage'a da kaydet
-            localStorage.setItem('token', action.payload.token)
-        })
-        
-    }
-})
+  name: "user", //slice is stored in the redux store as product
+  initialState, //initial state
+  reducers: {},
+  extraReducers: (builder) => {
+    //using extra reducers to handle async actions
+    builder.addCase(register.pending, (state, action) => {
+      // pending means the request is in progress
+      state.loading = true;
+      state.isAuth = false;
+    });
+    builder.addCase(register.fulfilled, (state, action) => {
+      // fulfilled means the request is completed successfully
+      state.loading = false;
+      state.isAuth = true;
+      state.user = action.payload.newUser; // payload is the data returned from the async function
+      // Token'ı localStorage'a da kaydet
+      localStorage.setItem("token", action.payload.token);
+    });
+    builder.addCase(login.pending, (state, action) => {
+      // pending means the request is in progress
+      state.loading = true;
+      state.isAuth = false;
+    });
+    builder.addCase(login.fulfilled, (state, action) => {
+      // fulfilled means the request is completed successfully
+      state.loading = false;
+      state.isAuth = true;
+      state.user = action.payload.user; // newUser yerine user kullan
+      // Token'ı localStorage'a da kaydet
+      localStorage.setItem("token", action.payload.token);
+    });
 
-export const {} = userSlice.actions
-export default userSlice.reducer
+    builder.addCase(loadUser.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+      state.isAuth = !!action.payload.user;
+    });
+
+    builder.addCase(logout.fulfilled, (state, action) => {
+      state.user = {};
+      state.isAuth = false;
+      localStorage.removeItem('token');
+    });
+  },
+});
+
+export const {} = userSlice.actions;
+export default userSlice.reducer;

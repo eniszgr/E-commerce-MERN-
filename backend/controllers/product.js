@@ -4,12 +4,10 @@ const cloudinary = require('cloudinary').v2;
 
 const allProducts = async(req,res)=>{
     const resultPerPage = 10;
-    console.log("REQ QUERY:", req.query);
+
     const productFilter = new ProductFilter(Product.find(), req.query).search().filter().pagination(resultPerPage);
 
-    // ProductFilter'ın filter fonksiyonunda zaten log varsa, burada tekrar loglamaya gerek yok.
-    // Ama productFilter.query'nin içeriğini görmek için:
-    console.log("MONGOOSE QUERY:", productFilter.query.getQuery());
+  
 
     const products = await productFilter.query;
 
