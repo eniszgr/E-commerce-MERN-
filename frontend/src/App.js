@@ -18,6 +18,8 @@ import Profile from "./pages/Profile";
 import { loadUser } from "./redux/userSlice";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { FaRegStickyNote } from "react-icons/fa";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,7 +37,9 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<Detail />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<Profile />} />
+            </Route>
           </Routes>
         </main>
         <Footer />
