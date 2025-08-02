@@ -8,5 +8,6 @@ export const store = configureStore({
         product: productSlice,       //calling the productSlice as product
         general: generalSlice,   //calling the generalSlice as general
         user: userSlice,
+        cart: cartSlice,
     }
 })
