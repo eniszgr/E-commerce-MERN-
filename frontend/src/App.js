@@ -20,12 +20,17 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { FaRegStickyNote } from "react-icons/fa";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ForgetPassword from "./pages/ForgetPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(loadUser());
-  }, [dispatch]);
+  const token = localStorage.getItem('token');
+  if(token){
+    useEffect(() => {
+      dispatch(loadUser());
+    }, [dispatch]);
+  }
   return (
     <div className="min-h-screen flex flex-col">
       <Router>
@@ -37,9 +42,11 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<Detail />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/forgot" element={<ForgetPassword />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<Profile />} />
             </Route>
+            <Route path="/reset/:token" element={<ResetPassword />} />
           </Routes>
         </main>
         <Footer />

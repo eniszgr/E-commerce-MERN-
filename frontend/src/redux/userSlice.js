@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+
 const initialState = {
   user: {},
   isAuth: false,
@@ -45,6 +46,41 @@ export const logout = createAsyncThunk(
     return response.json();
   }
 );
+export const forgotPassword = createAsyncThunk("forgot", async (email) => {
+  const response = await fetch('http://localhost:4000/forgotPassword', {
+    method: 'POST',
+    credentials:"include",
+    headers: {'Content-Type' : 'application/json'},
+    body: JSON.stringify({email})
+  });
+  let res = await response.json();
+  
+  if (!response.ok) {
+    throw new Error(res.message || 'Something went wrong');
+  }
+  
+  return res;
+});
+export const resetPassword = createAsyncThunk('reset',
+  async(params)=>{
+    const requestOptions ={
+      method:'POST',
+      headers: {'Content-Type':'application/json'},
+      credentials: 'include',
+      body:JSON.stringify({password:params.password})
+    };
+    const response = await fetch(`http://localhost:4000/reset/${params.token}`,requestOptions)
+    let res = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(res.message || 'Something went wrong');
+    }
+    
+    return res;
+  }
+)
+
+
 
 const userSlice = createSlice({
   name: "user", //slice is stored in the redux store as product
@@ -89,8 +125,34 @@ const userSlice = createSlice({
       state.isAuth = false;
       localStorage.removeItem('token');
     });
+    builder.addCase(loadUser.rejected, (state, action) => {
+      state.user = {};
+      state.loading = false;
+      state.isAuth = false;
+      localStorage.removeItem('token');
+    });
+    builder.addCase(forgotPassword.pending, (state,action)=>{
+      state.loading=true;
+    });
+    builder.addCase(forgotPassword.fulfilled, (state,action)=>{
+      state.loading=false;
+    });
+    builder.addCase(forgotPassword.rejected, (state,action)=>{
+      state.loading=false;
+    });
+    builder.addCase(resetPassword.pending, (state,action)=>{
+      state.loading=true;
+    });
+    builder.addCase(resetPassword.fulfilled, (state,action)=>{
+      state.loading=false;
+    });
+    builder.addCase(resetPassword.rejected, (state,action)=>{
+      state.loading=false;
+    });
+
   },
-});
+  },
+);
 
 export const {} = userSlice.actions;
 export default userSlice.reducer;

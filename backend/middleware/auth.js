@@ -15,7 +15,7 @@ const authenticationMid = async (req, res, next) => {
   try {
     const decodedData = jwt.verify(token, "SECRETTOKEN");
     const user = await User.findById(decodedData.id);
-    console.log(user);
+    
     if (!mongoose.Types.ObjectId.isValid(decodedData.id)) {
       return res.status(401).json({ message: "Invalid user ID in token" });
     }

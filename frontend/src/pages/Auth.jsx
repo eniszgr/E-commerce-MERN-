@@ -53,6 +53,7 @@ useEffect(()=>{
         {signUp && (
           <Input value={data.name} onChange={handleChange} type={"text"} name={"name"} placeholder={"Name"} id={""} />
         )}
+        
         <Input value={data.email} onChange={handleChange} type={"text"} name={"email"} placeholder={"Email"} id={""} />
         <Input value={data.password} onChange={handleChange} type={"password"} name={"password"}  placeholder={"Password"}id={""}/>
         {signUp && (
@@ -62,6 +63,7 @@ useEffect(()=>{
           </div>
         )}
         <div className="text-left text-blue-500 cursor-pointer my-2 pd-2" onClick={() => setSignUp(!signUp)}>{signUp ? "Login" : "Register"}</div>
+        <div onClick={()=>{navigate('/forgot')}} className="text-blue-600 text-left cursor-pointer" >Forgot Password</div>
         <Button name={signUp ? "Register" : "Login"} onClick={signUp ? registerFunc : loginFunc}/>
       </div>
     </div>
