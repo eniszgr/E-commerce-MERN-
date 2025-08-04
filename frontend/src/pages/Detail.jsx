@@ -7,11 +7,13 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { FaRegStarHalfStroke } from "react-icons/fa6";
 import Button from "../components/Button";
+import { addToCart } from "../redux/cartSlice";
 
 function Detail() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { product, loading } = useSelector((state) => state.product);
+  const [quantity, setQuantitiy]  = useState(1);
 
   useEffect(() => {
     if (id) {
@@ -47,9 +49,18 @@ function Detail() {
     return stars;
   };
 
-  const addBasket = () => {};
+  const addBasket = () => {
+    const data = {
+      id:product?.product?._id,
+      name: product?.product?.name,
+      image: product?.product?.images[0]?.url,
+      price: product?.product?.price,
+      quantity: quantity,
+    }
+    dispatch(addToCart(data));
+  }
 
-  const [quantity, setQuantitiy]  = useState(1);
+  
   const decrement = ()=>{
     if (quantity > 1)
     setQuantitiy(quantity - 1);

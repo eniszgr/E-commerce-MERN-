@@ -22,6 +22,8 @@ import { FaRegStickyNote } from "react-icons/fa";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Cart from "./pages/Cart";
+import Admin from "./pages/Admin";
 
 function App() {
   const dispatch = useDispatch();
@@ -43,10 +45,16 @@ function App() {
             <Route path="/product/:id" element={<Detail />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/forgot" element={<ForgetPassword />} />
-            <Route element={<ProtectedRoute />}>
+            <Route element={<ProtectedRoute isAdmin={false} />}>
               <Route path="/profile" element={<Profile />} />
             </Route>
+            <Route element={<ProtectedRoute isAdmin={true} />}>
+              <Route path="/admin" element={<Admin/>} />
+            </Route>
             <Route path="/reset/:token" element={<ResetPassword />} />
+            <Route path="/cart" element={<Cart/>}/>
+            
+
           </Routes>
         </main>
         <Footer />

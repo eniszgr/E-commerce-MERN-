@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-//if cart is in local storage, return it, otherwise return an empty array
+//if cart exist in local storage, return it, otherwise return an empty array
 const fetchFromLocalStorage = () => {
   const cart = localStorage.getItem("cart");
   if (cart) {
@@ -20,9 +20,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const isItemCart = state.carts.find(
-        (cart) => cart.id === action.payload.id
-      ); //if item already exist, return object
+      const isItemCart = state.carts.find((cart) => cart.id === action.payload.id); //if item already exist, return object
       if (isItemCart) {
         const tempCart = state.carts.map((item) => {
           if (item.id === action.payload.id) {

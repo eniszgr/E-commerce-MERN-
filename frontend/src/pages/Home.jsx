@@ -12,7 +12,7 @@ function Home() {
   }, [dispatch]);
 
   const {products, loading} = useSelector((state) => state.product);    //Destructure the products array and loading state from the product slice in the Redux store
-  console.log(products);
+
 
 
  return (

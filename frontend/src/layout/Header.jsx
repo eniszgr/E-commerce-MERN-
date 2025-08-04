@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getKeyword } from "../redux/generalSlice";
 import { logout } from "../redux/userSlice";
 
+
 function Header() {
   const menuItems = [
     { name: 'Profile', path: '/profile' },
@@ -20,6 +21,7 @@ function Header() {
   const [keyword, setKeyword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { carts } = useSelector((state) => state.cart); 
 
   const keywordFunc = ()=>{ 
     dispatch(getKeyword(keyword));
@@ -67,9 +69,9 @@ function Header() {
               </div>
 
               {/* Shopping Cart */}
-              <div className='relative cursor-pointer'>
+              <div onClick={()=>navigate('/cart')} className='relative cursor-pointer'>
                   <CiShoppingCart size={30}/>
-                  <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white">4</div>
+                  <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white">{carts?.length}</div>
               </div>
             </div>
         </div>
