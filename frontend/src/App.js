@@ -28,6 +28,7 @@ import Admin from "./pages/Admin";
 function App() {
   const dispatch = useDispatch();
   const token = localStorage.getItem('token');
+  const {user, isAuth} = useDispatch((state) => state.user);
   if(token){
     useEffect(() => {
       dispatch(loadUser());
@@ -48,7 +49,7 @@ function App() {
             <Route element={<ProtectedRoute isAdmin={false} />}>
               <Route path="/profile" element={<Profile />} />
             </Route>
-            <Route element={<ProtectedRoute isAdmin={true} />}>
+            <Route element={<ProtectedRoute isAdmin={true} user ={user} />}>
               <Route path="/admin" element={<Admin/>} />
             </Route>
             <Route path="/reset/:token" element={<ResetPassword />} />

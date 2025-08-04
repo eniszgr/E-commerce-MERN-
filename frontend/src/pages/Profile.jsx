@@ -4,7 +4,7 @@ import Button from "../components/Button";
 
 function Profile() {
   const { user, isAuth } = useSelector((state) => state.user);
-  console.log(user);
+  
   return (
     <div className="min-h-screen flex justify-center items-center gap-10  ">
         <div>
