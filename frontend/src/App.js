@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 import Home from "./pages/Home";
 import Header from "./layout/Header";
@@ -24,7 +24,6 @@ import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Cart from "./pages/Cart";
 import Admin from "./pages/Admin";
-import Unauthorized from "./components/Unauthorized";
 
 function App() {
   const dispatch = useDispatch();
@@ -54,7 +53,7 @@ function App() {
             <Route element={<ProtectedRoute isAdmin={false} />}>
               <Route path="/profile" element={<Profile />} />
             </Route>
-            <Route path="/admin" element={user?.role === "admin" ? <Admin /> : <Unauthorized />} />
+            <Route path="/admin" element={user?.role === "admin" ? <Admin /> : <Navigate to="/" />} />
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route path="/cart" element={<Cart/>}/>
             
