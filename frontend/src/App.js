@@ -29,15 +29,14 @@ import AccessDenied from "./components/AccessDenied";
 function App() {
   const dispatch = useDispatch();
   const { user, isAuth } = useSelector((state) => state.user); 
-  console.log("App user:", user);
+
   const token = localStorage.getItem('token');
   useEffect(() => {
     if(token){
       dispatch(loadUser());
     }
   }, [dispatch]);
- console.log("ProtectedRoute user:", user);
-  console.log("toke:", token )
+
 
   return (
     <div className="min-h-screen flex flex-col">
