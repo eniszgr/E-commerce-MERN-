@@ -110,8 +110,8 @@ const userSlice = createSlice({
       // fulfilled means the request is completed successfully
       state.loading = false;
       state.isAuth = true;
-      state.user = action.payload.user; // newUser yerine user kullan
-      // Token'ı localStorage'a da kaydet
+      state.user = action.payload.user; 
+      
       localStorage.setItem("token", action.payload.token);
     });
 

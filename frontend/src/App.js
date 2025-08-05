@@ -16,7 +16,7 @@ import Products from "./components/Products";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import { loadUser } from "./redux/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { FaRegStickyNote } from "react-icons/fa";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -24,22 +24,27 @@ import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Cart from "./pages/Cart";
 import Admin from "./pages/Admin";
+import Unauthorized from "./components/Unauthorized";
 
 function App() {
   const dispatch = useDispatch();
+  const { user, isAuth } = useSelector((state) => state.user); 
+  console.log("App user:", user);
   const token = localStorage.getItem('token');
-  const {user, isAuth} = useDispatch((state) => state.user);
-  if(token){
-    useEffect(() => {
+  useEffect(() => {
+    if(token){
       dispatch(loadUser());
-    }, [dispatch]);
-  }
+    }
+  }, [dispatch]);
+ console.log("ProtectedRoute user:", user);
+  console.log("toke:", token )
+
   return (
     <div className="min-h-screen flex flex-col">
       <Router>
         <Header />
         <main className="flex-grow">   
-          {/* flex grow ile boş alanlar doldurulur */}
+          
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
@@ -49,9 +54,7 @@ function App() {
             <Route element={<ProtectedRoute isAdmin={false} />}>
               <Route path="/profile" element={<Profile />} />
             </Route>
-            <Route element={<ProtectedRoute isAdmin={true} user ={user} />}>
-              <Route path="/admin" element={<Admin/>} />
-            </Route>
+            <Route path="/admin" element={user?.role === "admin" ? <Admin /> : <Unauthorized />} />
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route path="/cart" element={<Cart/>}/>
             
@@ -66,3 +69,6 @@ function App() {
 
 
 export default App;
+
+// ProtectedRoute.jsx
+

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     products: [],           // products array
+    adminProducts: [],     // admin products array
     product: {},           // single product object
     loading: false,         // loading state    
     error: null             // error state  
@@ -24,6 +25,16 @@ export const getProducts = createAsyncThunk(
     return data;
   }
 )
+export const getAdminProducts = createAsyncThunk(                                
+    'admin',                                                             
+    async ()=>{
+        const token = localStorage.getItem('token'); 
+        const response = await fetch(`http://localhost:4000/admin/products`,{headers:{authorization : `Bearer ${token}`}})      //fetching the data 
+        return (await response.json());                                     //converting the response to json
+    }
+)
+
+
 export const getProductDetails = createAsyncThunk(                                //thunk is a async functions controller
     'product',                                                             //thunk name, prefix for the action
     async (id)=>{
@@ -52,6 +63,13 @@ const productSlice = createSlice({
         builder.addCase(getProductDetails.fulfilled, (state,action) => {          // fulfilled means the request is completed successfully
             state.loading = false,
             state.product = action.payload                                 // payload is the data returned from the async function
+        })
+        builder.addCase(getAdminProducts.pending, (state,action) => {            // pending means the request is in progress
+            state.loading = true
+        })
+        builder.addCase(getAdminProducts.fulfilled, (state,action) => {          // fulfilled means the request is completed successfully
+            state.loading = false,
+            state.adminProducts = action.payload                                 // payload is the data returned from the async function
         })
     }
 })
