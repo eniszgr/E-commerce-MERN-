@@ -3,10 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 function ProtectedRoute({ isAdmin, user, loading }) {
   const token = localStorage.getItem('token');
-  console.log("ProtectedRoute user:", JSON.stringify(user, null, 2));
-  console.log("ProtectedRoute token:", token);
-  console.log("ProtectedRoute isAdmin:", isAdmin);
-  console.log("ProtectedRoute loading:", loading);
+
   
   // Token yoksa ana sayfaya yönlendir
   if (!token) {
