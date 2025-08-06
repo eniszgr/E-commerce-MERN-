@@ -2,3 +2,9 @@ backend/node_modules
 backend/.env
 frontend/node_modules
 frontend/.env
+frontend/src/redux/generalSlice.js
+frontend/src/pages/Admin.jsx
+frontend/src/components/Modal.jsx
+frontend/src/pages/Admin.jsx
+frontend/src/redux/generalSlice.js
+

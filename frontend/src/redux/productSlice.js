@@ -28,9 +28,23 @@ export const getProducts = createAsyncThunk(
 export const getAdminProducts = createAsyncThunk(                                
     'admin',                                                             
     async ()=>{
-        const token = localStorage.getItem('token'); 
-        const response = await fetch(`http://localhost:4000/admin/products`,{headers:{authorization : `Bearer ${token}`}})      //fetching the data 
-        return (await response.json());                                     //converting the response to json
+        try {
+            const response = await fetch(`http://localhost:4000/admin/products`, {
+                credentials: 'include'
+            });
+            
+            const data = await response.json();
+         
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to fetch admin products');
+            }
+            
+            return data;
+        } catch (error) {
+            console.error("getAdminProducts error:", error);
+            throw error;
+        }
     }
 )
 
@@ -69,7 +83,12 @@ const productSlice = createSlice({
         })
         builder.addCase(getAdminProducts.fulfilled, (state,action) => {          // fulfilled means the request is completed successfully
             state.loading = false,
-            state.adminProducts = action.payload                                 // payload is the data returned from the async function
+            state.adminProducts = action.payload, // düzeltildi
+            state.error = null
+        })
+        builder.addCase(getAdminProducts.rejected, (state,action) => {           // rejected means the request failed
+            state.loading = false,
+            state.error = action.error.message
         })
     }
 })

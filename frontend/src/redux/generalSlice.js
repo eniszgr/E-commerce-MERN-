@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    keyword:""
+    keyword:"",
+    openModal: false, 
 }
 
 const generalSlice = createSlice({
@@ -10,10 +11,13 @@ const generalSlice = createSlice({
     reducers: {
        getKeyword: (state, action) => {
             state.keyword = action.payload;                               
+        },
+        openModal: (state, action) => {
+            state.openModal = action.payload;                              //openModal is a boolean 
         }
     },
    
 })
 
-export const { getKeyword} = generalSlice.actions
+export const { getKeyword, openModal} = generalSlice.actions
 export default generalSlice.reducer ; 
