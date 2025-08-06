@@ -7,14 +7,23 @@ import { logout } from "../redux/userSlice";
 
 
 function Header() {
-  const menuItems = [
-    { name: 'Profile', path: '/profile' },
-    { name: 'Admin', path: '/admin' },
-    { name: 'Logout', path:"/logout"},
-  ]
  
+
   // pull user information from Redux state
   const { user, isAuth } = useSelector((state) => state.user);
+  const baseMenuItems = [
+    { name: 'Profile', path: '/profile' },
+    { name: 'Admin', path: '/admin' },
+  ];
+
+  // Conditionally add Login/Logout item based on authentication status
+  const authMenuItem = isAuth 
+    ? { name: 'Logout', path: '/logout' } // If authenticated, show Logout
+    : { name: 'Login', path: '/auth' };   // If not authenticated, show Login
+
+  // Combine base items with the authentication-dependent item
+  const menuItems = [...baseMenuItems, authMenuItem];
+  
 
   //menu control func
   const [openMenu, setOpenMenu] = useState(false);
