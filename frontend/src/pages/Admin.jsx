@@ -3,18 +3,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAdminProducts } from "../redux/productSlice"; // <-- Doğrudan import et
 import ProductCard from "../components/ProductCard";
 import Button from "../components/Button"; // Assuming you have a Button component
+import Modal from "../components/Modal";
+import { setOpenModal } from "../redux/generalSlice";
 
 function Admin() {
   const dispatch = useDispatch();
   const { adminProducts, loading, error } = useSelector(
     (state) => state.product
   );
+  const { openModal } = useSelector((state) => state.general); // Redux store'dan openModal durumunu al
+  const addProduct = () => {
+    dispatch(setOpenModal(true));
+  }
 
   useEffect(() => {
     dispatch(getAdminProducts());
   }, [dispatch]);
 
   useEffect(() => {}, [adminProducts, loading, error]);
+  const content = "aa"
 
   return (
     <div className="p-4">
@@ -27,7 +34,7 @@ function Admin() {
           <h1 className="text-2xl font-bold mb-4">Admin Panel</h1>
           <div className="flex justify-center">
             <div className="max-w-md w-full">
-              <Button name={"Add Product"} onClick={() => {}} />
+              <Button name={"Add Product"} onClick={addProduct} />
             </div>
           </div>
 
@@ -45,6 +52,10 @@ function Admin() {
           </div>
         </div>
       )}
+
+
+      {openModal && <Modal  title={"ürün ekle"} content={content}/>}
+
     </div>
   );
 }

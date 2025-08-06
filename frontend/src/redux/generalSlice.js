@@ -12,12 +12,12 @@ const generalSlice = createSlice({
        getKeyword: (state, action) => {
             state.keyword = action.payload;                               
         },
-        openModal: (state, action) => {
+        setOpenModal: (state, action) => {
             state.openModal = action.payload;                              //openModal is a boolean 
         }
     },
    
 })
 
-export const { getKeyword, openModal} = generalSlice.actions
+export const { getKeyword, setOpenModal} = generalSlice.actions
 export default generalSlice.reducer ; 
